@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #66d2da;
+            --bg-color: #69a2a7;
             --text-color: #e2e8f0;
             --primary-color: #4c51bf;
             --secondary-color: #d69e2e;
@@ -19,7 +19,7 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--bg-color);
+            background-color: #2d3748;
             color: var(--text-color);
             margin: 0;
             display: flex;
@@ -35,12 +35,13 @@
             justify-content: center;
             text-align: center;
             padding: 20px;
-            max-width: 600px;
-            margin: 20px;
-            background: #2d3748;
+            max-width: 80%;
+            margin: 10px;
+            background: rgba(0, 0, 0, 0.3);
             border-radius: 15px;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
             color: white;
+            
         }
 
         h1 {
@@ -53,10 +54,51 @@
             font-size: 1.2em;
             margin-bottom: 15px;
         }
+        
+        /* New CSS for the option boxes on the start screen */
+        .options-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            width: 100%;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .option-box {
+            flex: 1;
+            min-width: 120px;
+            background-color: #4a5568;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .option-box h4 {
+            margin-top: 0;
+            font-size: 1.1em;
+            color: var(--secondary-color);
+        }
+
+        .option-box p {
+            font-size: 0.9em;
+            margin-bottom: 0;
+        }
+
+        /* Optional: Add a horizontal rule for better visual separation */
+        hr {
+            border: 0;
+            height: 1px;
+            background: #4a5568;
+            width: 100%;
+            margin: 20px 0;
+        }
+
 
         ul {
             text-align: left;
-            max-width: 500px;
+            max-width: 70%;
             margin: 20px auto;
             font-size: 1em;
             padding-left: 20px;
@@ -83,7 +125,9 @@
 
         .form-group {
             margin-bottom: 15px;
-            width: 100%;
+            width: 40%;
+            align-items: center;
+            
         }
 
         .form-group label {
@@ -112,6 +156,7 @@
 
         .leaderboard-item {
             display: flex;
+           
             justify-content: space-between;
             align-items: center;
             padding: 10px 15px;
@@ -206,6 +251,15 @@
             color: var(--secondary-color);
         }
 
+        /* New CSS for Accuracy */
+        .accuracy {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            margin-left: 15px;
+        }
+
+
         .container {
             flex: 1;
             display: flex;
@@ -214,6 +268,8 @@
             flex-wrap: wrap;
             justify-content: center;
             align-items: flex-start;
+            background-color: #69a2a7;
+            padding-bottom: 200px;
         }
 
         .video-section {
@@ -302,7 +358,7 @@
         .box.selected {
             background: var(--secondary-color);
             color: white;
-            border-color: #f6ad55;
+            border-color: #557bf6;
             transform: scale(1.05);
         }
 
@@ -341,8 +397,14 @@
 
     <div id="start-screen" class="screen-container">
         <h1>📦 Stow Decision Game</h1>
-        <p>Test your observation and decision-making skills!</p>
-        <div style="width: 100%;">
+        <p>Test your observation and decision-making skills!
+            
+        </p>
+        <div style="width: 100%; display: flex
+;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;">
             <div class="form-group">
                 <label for="playerName">Name:</label>
                 <input type="text" id="playerName" required>
@@ -352,13 +414,32 @@
                 <input type="email" id="playerEmail" required>
             </div>
         </div>
+        <div class="options-container">
+            <div class="option-box">
+                <h4>📦 Stow</h4>
+                <p>Select this option and the appropriate box when the item can be placed in a bin.</p>
+            </div>
+            <div class="option-box">
+                <h4>🚫 No Stow</h4>
+                <p>Choose this when the item cannot be stowed due to a clear reason, like being oversized or damaged.</p>
+            </div>
+            <div class="option-box">
+                <h4>❓ Not Sure</h4>
+                <p>Use this if you are uncertain whether the item can be stowed but a "Stow" or "No Stow" decision is possible with more inspection.</p>
+            </div>
+            <div class="option-box">
+                <h4>🤷 Unable to Determine</h4>
+                <p>This is for when a decision is impossible to make due to a lack of information, such as the video being blurry or the item being completely out of view.</p>
+            </div>
+        </div>
+        <hr>
         <ul>
             <li>🎥 Watch 10 vertical videos (1080×1920).</li>
             <li>⏱ Time decreases every two videos: 60s → 50s → 40s → 30s → 20s.</li>
             <li>🔁 Replay allowed within the time limit.</li>
             <li>✅ Choose: Stow, No Stow, Not Sure, Unable to Determine.</li>
             <li>📦 If Stow, select the correct box (10×4 grid).</li>
-            <li>🏆 Scoring: 
+            <li>🏆 Scoring:
                 <ul>
                     <li>+10 points for each correct decision.</li>
                     <li>Maximum score is 100.</li>
@@ -375,6 +456,7 @@
             </div>
             <div class="clock" id="clock">⏳ <span id="timeLeft">60</span>s</div>
             <div class="score">Score: <span id="score">0</span></div>
+            <div class="accuracy">Accuracy: <span id="accuracy">100</span>%</div>
         </div>
         <div class="container">
             <div class="video-section">
@@ -398,9 +480,10 @@
 
     <div id="feedback"></div>
 
-    <div id="end-screen" class="screen-container" style="display: none;">
+    <div id="end-screen" class="screen-container" style="display: none; width: 70%;">
         <h1>🎉 Game Complete!</h1>
         <p>Your final score is: <strong id="final-score">0</strong></p>
+        <p>Your final accuracy is: <strong id="final-accuracy">100</strong>%</p>
         <h2>🏆 Leaderboard</h2>
         <ul id="leaderboard-list"></ul>
         <button onclick="location.reload()">Play Again</button>
@@ -409,6 +492,8 @@
     <script>
         let currentVideo = 1;
         let score = 0;
+        let correctCount = 0; // New variable for correct answers
+        let totalAttempts = 0; // New variable for total attempts
         let reviewTimes = [60, 60, 50, 50, 40, 40, 30, 30, 20, 20];
         let timer;
         let timeLeft = reviewTimes[0];
@@ -423,16 +508,46 @@
         ];
 
         const correctAnswers = {
-            1: { decision: 'Stow', box: 'I3' },
-            2: { decision: 'Stow', box: 'B1' },
-            3: { decision: 'Stow', box: 'I3' },
-            4: { decision: 'Stow', box: 'A4' },
-            5: { decision: 'Stow', box: 'B1' },
-            6: { decision: 'No Stow', box: 'B1' },
-            7: { decision: 'Not Sure', box: 'B1' },
-            8: { decision: 'No Stow', box: 'B1' },
-            9: { decision: 'Stow', box: 'C2' },
-            10: { decision: 'No Stow', box: 'B1' }
+            1: {
+                decision: 'Stow',
+                box: 'D3'
+            },
+            2: {
+                decision: 'Stow',
+                box: 'B1'
+            },
+            3: {
+                decision: 'Stow',
+                box: 'G3'
+            },
+            4: {
+                decision: 'Stow',
+                box: 'A4'
+            },
+            5: {
+                decision: 'Stow',
+                box: 'B3'
+            },
+            6: {
+                decision: 'No Stow',
+                box: 'E2'
+            },
+            7: {
+                decision: 'Not Sure',
+                box: 'F1'
+            },
+            8: {
+                decision: 'No Stow',
+                box: 'G2'
+            },
+            9: {
+                decision: 'Stow',
+                box: 'H1'
+            },
+            10: {
+                decision: 'No Stow',
+                box: 'H4'
+            }
         };
 
         function startGame() {
@@ -443,6 +558,15 @@
                 showFeedback(false, null, 0, "Please enter your name and email to start the game.");
                 return;
             }
+
+            // Reset game state for a new game
+            score = 0;
+            correctCount = 0;
+            totalAttempts = 0;
+            currentVideo = 1;
+            document.getElementById('score').textContent = score;
+            document.getElementById('accuracy').textContent = '100';
+
 
             document.getElementById('start-screen').style.display = 'none';
             document.getElementById('game-screen').style.display = 'flex';
@@ -482,11 +606,15 @@
             }
         }
 
+        
+
         function checkAnswer(decision, boxLabel = null) {
             clearInterval(timer);
             const correct = correctAnswers[currentVideo - 1];
             let isCorrect = false;
             let scoreChange = 0;
+
+            totalAttempts++; // Increment total attempts
 
             if (decision === correct.decision) {
                 if (decision === 'Stow') {
@@ -500,8 +628,17 @@
                 }
             }
 
+            if (isCorrect) {
+                correctCount++; // Increment correct answers
+            }
+
             score += scoreChange;
             document.getElementById('score').textContent = score;
+
+            // Calculate and display accuracy
+            const accuracy = totalAttempts > 0 ? Math.round((correctCount / totalAttempts) * 100) : 100;
+            document.getElementById('accuracy').textContent = accuracy;
+
             showFeedback(isCorrect, correct, scoreChange);
 
             if (currentVideo > videoSources.length) {
@@ -594,6 +731,10 @@
             document.getElementById('game-screen').style.display = 'none';
             document.getElementById('end-screen').style.display = 'flex';
             document.getElementById('final-score').textContent = score;
+
+            // Calculate final accuracy
+            const finalAccuracy = totalAttempts > 0 ? Math.round((correctCount / totalAttempts) * 100) : 0;
+            document.getElementById('final-accuracy').textContent = finalAccuracy;
 
             const players = JSON.parse(localStorage.getItem('stow_players') || '[]');
             const currentPlayerEntry = {
