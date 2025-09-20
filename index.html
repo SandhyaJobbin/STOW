@@ -430,7 +430,7 @@
 
 <body>
     <div id="start-screen" class="screen-container">
-        <h1>📦 Stow Decision Game</h1>
+        <h1>📦 Stow & Go</h1>
         <p>Test your observation and decision-making skills!</p>
         <div style="width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;">
             <div class="form-group">
@@ -442,6 +442,29 @@
                 <input type="email" id="playerEmail" required>
             </div>
         </div>
+
+        <hr>
+        <ul><li>Maximum score is 100.</li>
+            <li>Scoring:
+                
+                   +10 points for each correct decision.</li>
+            <li>Time decreases every two videos: 60s → 50s → 40s → 30s → 20s.</li>
+
+            <li>Watch the Video Carefully – Review the video to determine if a stowing action took place. <br> You may replay
+                the video as many times as needed within the time limit.</li>
+            
+                    
+            <li><b>Identify the Action –</b>
+                If stowing occurred, select "Stow" and choose the correct bin where the product was placed. <br>
+                If the action is anything other than stow, simply select the appropriate option — no bin selection is
+                required.</li>
+            <li><b>Submit Before Time Runs Out –</b> If you don’t answer within the given time, the game will automatically move to the next video.</li>
+            <li>Stay Focused – Accuracy and speed matter. Use your replays wisely and make your selection confidently before the timer ends.</li>
+            
+            
+            
+        </ul>
+        <hr>
         <div class="options-container">
             <div class="option-box">
                 <h4>📦 Stow</h4>
@@ -449,31 +472,21 @@
             </div>
             <div class="option-box">
                 <h4>🚫 No Stow</h4>
-                <p>Choose this when the item cannot be stowed due to a clear reason, like being oversized or damaged.</p>
+                <p>Choose this when the item cannot be stowed due to a clear reason, like being oversized or damaged.
+                </p>
             </div>
             <div class="option-box">
                 <h4>❓ Not Sure</h4>
-                <p>Use this if you are uncertain whether the item can be stowed but a "Stow" or "No Stow" decision is possible with more inspection.</p>
+                <p>Use this if you are uncertain whether the item can be stowed but a "Stow" or "No Stow" decision is
+                    possible with more inspection.</p>
             </div>
             <div class="option-box">
                 <h4>🤷 Unable to Determine</h4>
-                <p>This is for when a decision is impossible to make due to a lack of information, such as the video being blurry or the item being completely out of view.</p>
+                <p>This is for when a decision is impossible to make due to a lack of information, such as the video
+                    being blurry or the item being completely out of view.</p>
             </div>
         </div>
-        <hr>
-        <ul>
-            <li>🎥 Watch 10 vertical videos (1080×1920).</li>
-            <li>⏱ Time decreases every two videos: 60s → 50s → 40s → 30s → 20s.</li>
-            <li>🔁 Replay allowed within the time limit.</li>
-            <li>✅ Choose: Stow, No Stow, Not Sure, Unable to Determine.</li>
-            <li>📦 If Stow, select the correct box (10×4 grid).</li>
-            <li>🏆 Scoring:
-                <ul>
-                    <li>+10 points for each correct decision.</li>
-                    <li>Maximum score is 100.</li>
-                </ul>
-            </li>
-        </ul>
+
         <button onclick="startGame()">Start Game</button>
     </div>
 
