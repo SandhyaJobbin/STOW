@@ -22,10 +22,11 @@
             background-color: #2d3748;
             color: var(--text-color);
             margin: 0;
+            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            min-height: 80vh;
         }
 
         .screen-container {
@@ -185,6 +186,7 @@
 
 
         #game-screen {
+            
             display: none;
             height: 100vh;
             flex-direction: column;
@@ -263,21 +265,28 @@
         .container {
             flex: 1;
             display: flex;
-            padding: 20px;
+            margin: 0;
             gap: 20px;
             flex-wrap: wrap;
             justify-content: center;
-            align-items: flex-start;
+            align-items: center;
             background-color: #69a2a7;
-            padding-bottom: 200px;
+            
         }
+
+        /* .container{
+            display: flex;
+            align-items: center;
+            justify-content: start;
+        } */
 
         .video-section {
             flex: 2;
-            min-width: 360px;
+            min-width: 100px;
             display: flex;
             flex-direction: column;
             align-items: center;
+            scale: 0.78;
         }
 
         video {
@@ -290,11 +299,12 @@
         }
 
         .decision-container {
-            margin-top: 25px;
+            margin: 8px;
             display: flex;
-            gap: 12px;
+            gap: 6px;
             flex-wrap: wrap;
             justify-content: center;
+
         }
 
         .decision-container button {
@@ -322,11 +332,12 @@
             border-radius: 15px;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
             align-self: stretch;
+            scale: 0.8;
         }
 
         .grid-section h3 {
             text-align: center;
-            margin-bottom: 20px;
+            margin: 0;
             color: var(--secondary-color);
         }
 
@@ -466,13 +477,25 @@
             </div>
             <div class="grid-section">
                 <h3>Select the box:</h3>
-                <div class="grid" id="grid"></div>
                 <div class="decision-container">
+                    <button onclick="selectDecision('Stow')">📦 Stow</button>
+                 <button onclick="selectDecision('No Stow')">🚫 No Stow</button>
+                    <!-- <button onclick="selectDecision('Not Sure')">❓ Not Sure</button>
+                    <button onclick="selectDecision('Unable to Determine')">🤷 Unable</button>  -->
+                </div>
+                <div class="decision-container">
+                    <!-- <button onclick="selectDecision('Stow')">📦 Stow</button>
+                    <button onclick="selectDecision('No Stow')">🚫 No Stow</button> -->
+                    <button onclick="selectDecision('Not Sure')">❓ Not Sure</button>
+                    <button onclick="selectDecision('Unable to Determine')">🤷 Unable</button>
+                </div>
+                <div class="grid" id="grid"></div>
+                <!-- <div class="decision-container">
                     <button onclick="selectDecision('Stow')">📦 Stow</button>
                     <button onclick="selectDecision('No Stow')">🚫 No Stow</button>
                     <button onclick="selectDecision('Not Sure')">❓ Not Sure</button>
                     <button onclick="selectDecision('Unable to Determine')">🤷 Unable</button>
-                </div>
+                </div> -->
             </div>
 
         </div>
