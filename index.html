@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stow Decision Game</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
     <style>
         :root {
             --bg-color: #69a2a7;
@@ -15,6 +17,7 @@
             --correct-color: #38a169;
             --incorrect-color: #e53e3e;
             --info-color: #3182ce;
+            --header-bg: #2d3748;
         }
 
         body {
@@ -26,7 +29,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 80vh;
+            min-height: 100vh;
         }
 
         .screen-container {
@@ -36,13 +39,20 @@
             justify-content: center;
             text-align: center;
             padding: 20px;
-            max-width: 80%;
+            max-width: 90%;
             margin: 10px;
             background: rgba(0, 0, 0, 0.3);
             border-radius: 15px;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
             color: white;
-            
+        }
+
+        #leaderboard-screen {
+            max-width: 700px;
+            width: 95%;
+            padding: 30px 40px;
+            background: #2d3748;
+            border-radius: 15px;
         }
 
         h1 {
@@ -51,12 +61,17 @@
             font-weight: 700;
         }
 
+        h2 {
+            font-size: 1.8em;
+            margin-top: 20px;
+            color: var(--secondary-color);
+        }
+
         p {
             font-size: 1.2em;
             margin-bottom: 15px;
         }
-        
-        /* New CSS for the option boxes on the start screen */
+
         .options-container {
             display: flex;
             justify-content: space-between;
@@ -87,7 +102,6 @@
             margin-bottom: 0;
         }
 
-        /* Optional: Add a horizontal rule for better visual separation */
         hr {
             border: 0;
             height: 1px;
@@ -96,10 +110,9 @@
             margin: 20px 0;
         }
 
-
         ul {
             text-align: left;
-            max-width: 70%;
+            max-width: 100%;
             margin: 20px auto;
             font-size: 1em;
             padding-left: 20px;
@@ -126,9 +139,9 @@
 
         .form-group {
             margin-bottom: 15px;
-            width: 40%;
+            width: 80%;
+            max-width: 300px;
             align-items: center;
-            
         }
 
         .form-group label {
@@ -148,50 +161,70 @@
             box-sizing: border-box;
         }
 
-        #leaderboard-list {
-            list-style-type: none;
-            padding: 0;
+        #leaderboard-table {
             width: 100%;
+            border-collapse: collapse;
+            font-size: 1em;
             margin-top: 20px;
         }
 
-        .leaderboard-item {
-            display: flex;
-           
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 15px;
+        #leaderboard-table th,
+        #leaderboard-table td {
+            padding: 12px 15px;
             border-bottom: 1px solid #4a5568;
-            transition: background-color 0.2s;
-        }
-
-        .leaderboard-item:last-child {
-            border-bottom: none;
-        }
-
-        .leaderboard-item.current-player {
-            background-color: var(--secondary-color);
-            font-weight: bold;
-            border-radius: 5px;
-        }
-
-        .leaderboard-item span:first-child {
-            flex-grow: 1;
             text-align: left;
         }
 
-        .leaderboard-item span:last-child {
+        #leaderboard-table th {
+            background: #4a5568;
             font-weight: bold;
         }
 
+        .rank-1st {
+            background-color: #FFD700;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .rank-2nd {
+            background-color: #C0C0C0;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .rank-3rd {
+            background-color: #CD7F32;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .leaderboard-pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .pagination-btn {
+            padding: 5px 10px;
+            font-size: 1.2em;
+        }
+
+        #total-users-count {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 1em;
+            font-weight: 600;
+            color: white;
+        }
 
         #game-screen {
-            
             display: none;
             height: 100vh;
+            width: 100%;
             flex-direction: column;
             background-color: var(--bg-color);
-            width: 100%;
         }
 
         .top-bar {
@@ -199,7 +232,7 @@
             align-items: center;
             justify-content: space-between;
             padding: 15px 25px;
-            background: rgba(0, 0, 0, 0.3);
+            background: var(--header-bg);
             border-bottom: 2px solid var(--primary-color);
         }
 
@@ -226,6 +259,7 @@
             align-items: center;
             gap: 2px;
             margin-right: 15px;
+            color: var(--secondary-color);
         }
 
         .clock.warning {
@@ -250,17 +284,15 @@
         .score {
             font-size: 1.5em;
             font-weight: bold;
-            color: var(--secondary-color);
+            color: white;
         }
 
-        /* New CSS for Accuracy */
         .accuracy {
             font-size: 1.5em;
             font-weight: bold;
             color: white;
             margin-left: 15px;
         }
-
 
         .container {
             flex: 1;
@@ -271,14 +303,7 @@
             justify-content: center;
             align-items: center;
             background-color: #69a2a7;
-            
         }
-
-        /* .container{
-            display: flex;
-            align-items: center;
-            justify-content: start;
-        } */
 
         .video-section {
             flex: 2;
@@ -304,7 +329,6 @@
             gap: 6px;
             flex-wrap: wrap;
             justify-content: center;
-
         }
 
         .decision-container button {
@@ -405,17 +429,10 @@
 </head>
 
 <body>
-
     <div id="start-screen" class="screen-container">
         <h1>📦 Stow Decision Game</h1>
-        <p>Test your observation and decision-making skills!
-            
-        </p>
-        <div style="width: 100%; display: flex
-;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;">
+        <p>Test your observation and decision-making skills!</p>
+        <div style="width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;">
             <div class="form-group">
                 <label for="playerName">Name:</label>
                 <input type="text" id="playerName" required>
@@ -460,7 +477,7 @@
         <button onclick="startGame()">Start Game</button>
     </div>
 
-    <div id="game-screen">
+    <div id="game-screen" style="display: none;">
         <div class="top-bar">
             <div class="progress-container">
                 <div class="progress-bar" id="progress-bar"></div>
@@ -479,45 +496,59 @@
                 <h3>Select the box:</h3>
                 <div class="decision-container">
                     <button onclick="selectDecision('Stow')">📦 Stow</button>
-                 <button onclick="selectDecision('No Stow')">🚫 No Stow</button>
-                    <!-- <button onclick="selectDecision('Not Sure')">❓ Not Sure</button>
-                    <button onclick="selectDecision('Unable to Determine')">🤷 Unable</button>  -->
-                </div>
-                <div class="decision-container">
-                    <!-- <button onclick="selectDecision('Stow')">📦 Stow</button>
-                    <button onclick="selectDecision('No Stow')">🚫 No Stow</button> -->
+                    <button onclick="selectDecision('No Stow')">🚫 No Stow</button>
                     <button onclick="selectDecision('Not Sure')">❓ Not Sure</button>
                     <button onclick="selectDecision('Unable to Determine')">🤷 Unable</button>
                 </div>
                 <div class="grid" id="grid"></div>
-                <!-- <div class="decision-container">
-                    <button onclick="selectDecision('Stow')">📦 Stow</button>
-                    <button onclick="selectDecision('No Stow')">🚫 No Stow</button>
-                    <button onclick="selectDecision('Not Sure')">❓ Not Sure</button>
-                    <button onclick="selectDecision('Unable to Determine')">🤷 Unable</button>
-                </div> -->
             </div>
-
         </div>
     </div>
-
     <div id="feedback"></div>
 
-    <div id="end-screen" class="screen-container" style="display: none; width: 70%;">
-        <h1>🎉 Game Complete!</h1>
-        <p>Your final score is: <strong id="final-score">0</strong></p>
-        <p>Your final accuracy is: <strong id="final-accuracy">100</strong>%</p>
-        <h2>🏆 Leaderboard</h2>
-        <ul id="leaderboard-list"></ul>
-        <button onclick="location.reload()">Play Again</button>
+    <div id="leaderboard-screen" class="screen-container" style="display: none;">
+        <h1>🏆 Leaderboard</h1>
+        <table id="leaderboard-table">
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Name</th>
+                    <th>Score</th>
+                    <th>Accuracy</th>
+                </tr>
+            </thead>
+            <tbody id="leaderboard-body"></tbody>
+        </table>
+        <div class="leaderboard-pagination">
+            <button class="pagination-btn" id="prev-page-btn"> &lt; </button>
+            <span id="page-count">Page 1 of 1</span>
+            <button class="pagination-btn" id="next-page-btn"> &gt; </button>
+        </div>
+        <p id="total-users-count">Total Users: 0</p>
+        <button onclick="showStartScreen()">Play Again</button>
     </div>
 
     <script>
+        // Firebase config
+        const firebaseConfig = {
+            apiKey: "AIzaSyBnQ0s1jFoMH6J7vhKVM7NVC-WNScLdA7E",
+            authDomain: "sutherland-6ce2b.firebaseapp.com",
+            projectId: "sutherland-6ce2b",
+            databaseURL: "https://sutherland-6ce2b-default-rtdb.firebaseio.com",
+        };
+
+        // Initialize Firebase
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        } else {
+            firebase.app(); // if already initialized, use that one
+        }
+
         let currentVideo = 1;
         let score = 0;
-        let correctCount = 0; // New variable for correct answers
-        let totalAttempts = 0; // New variable for total attempts
-        let reviewTimes = [60, 60, 50, 50, 40, 40, 30, 30, 20, 20];
+        let correctCount = 0;
+        let totalAttempts = 0;
+        const reviewTimes = [60, 60, 50, 50, 40, 40, 30, 30, 20, 20];
         let timer;
         let timeLeft = reviewTimes[0];
         let selectedDecision = null;
@@ -531,65 +562,104 @@
         ];
 
         const correctAnswers = {
-            1: {
-                decision: 'Stow',
-                box: 'D3'
-            },
-            2: {
-                decision: 'Stow',
-                box: 'B1'
-            },
-            3: {
-                decision: 'Stow',
-                box: 'G3'
-            },
-            4: {
-                decision: 'Stow',
-                box: 'A4'
-            },
-            5: {
-                decision: 'Stow',
-                box: 'B3'
-            },
-            6: {
-                decision: 'No Stow',
-                box: 'E2'
-            },
-            7: {
-                decision: 'Not Sure',
-                box: 'F1'
-            },
-            8: {
-                decision: 'No Stow',
-                box: 'G2'
-            },
-            9: {
-                decision: 'Stow',
-                box: 'H1'
-            },
-            10: {
-                decision: 'No Stow',
-                box: 'H4'
-            }
+            1: { decision: 'Stow', box: 'D3' },
+            2: { decision: 'Stow', box: 'B1' },
+            3: { decision: 'Stow', box: 'G3' },
+            4: { decision: 'Stow', box: 'A4' },
+            5: { decision: 'Stow', box: 'B3' },
+            6: { decision: 'No Stow' },
+            7: { decision: 'Not Sure' },
+            8: { decision: 'No Stow' },
+            9: { decision: 'Stow', box: 'H1' },
+            10: { decision: 'No Stow' }
         };
 
+        let leaderboard = [];
+        const LEADERBOARD_PAGE_SIZE = 10;
+        let currentPage = 1;
+
+        // --- Firebase Integration ---
+        const leaderboardRef = firebase.database().ref('leaderboard_stow');
+
+        function setupLeaderboardListener() {
+            leaderboardRef.on('value', (snapshot) => {
+                const data = snapshot.val() || {};
+                leaderboard = Object.values(data);
+                updateLeaderboardTable();
+            });
+        }
+
+        function saveScoreToFirebase() {
+            if (!playerName || !playerEmail || totalAttempts === 0) return;
+
+            const finalAccuracy = totalAttempts > 0 ? Math.round((correctCount / totalAttempts) * 100) : 0;
+            const playerKey = btoa(playerName + playerEmail).replace(/[^a-zA-Z0-9]/g, '');
+
+            const playerEntry = {
+                name: playerName,
+                email: playerEmail,
+                score: score,
+                accuracy: finalAccuracy
+            };
+
+            leaderboardRef.child(playerKey).set(playerEntry);
+        }
+
+        function updateLeaderboardTable() {
+            const sorted = [...leaderboard].sort((a, b) => b.score - a.score);
+            const totalUsers = sorted.length;
+            const totalPages = Math.ceil(totalUsers / LEADERBOARD_PAGE_SIZE);
+
+            const startIndex = (currentPage - 1) * LEADERBOARD_PAGE_SIZE;
+            const endIndex = startIndex + LEADERBOARD_PAGE_SIZE;
+            const displayedEntries = sorted.slice(startIndex, endIndex);
+
+            const leaderboardBody = document.getElementById('leaderboard-body');
+            leaderboardBody.innerHTML = '';
+
+            displayedEntries.forEach((entry, index) => {
+                const rank = startIndex + index + 1;
+                const tr = document.createElement('tr');
+
+                if (rank === 1) {
+                    tr.classList.add('rank-1st');
+                } else if (rank === 2) {
+                    tr.classList.add('rank-2nd');
+                } else if (rank === 3) {
+                    tr.classList.add('rank-3rd');
+                }
+
+                tr.innerHTML = `
+                    <td>${rank}</td>
+                    <td>${entry.name}</td>
+                    <td>${entry.score}</td>
+                    <td>${entry.accuracy}%</td>
+                `;
+                leaderboardBody.appendChild(tr);
+            });
+
+            document.getElementById('page-count').textContent = `Page ${currentPage} of ${totalPages || 1}`;
+            document.getElementById('prev-page-btn').disabled = currentPage === 1;
+            document.getElementById('next-page-btn').disabled = currentPage >= totalPages;
+            document.getElementById('total-users-count').textContent = `Total Users: ${totalUsers}`;
+        }
+
+        // --- Game Logic ---
         function startGame() {
-            playerName = document.getElementById('playerName').value;
-            playerEmail = document.getElementById('playerEmail').value;
+            playerName = document.getElementById('playerName').value.trim();
+            playerEmail = document.getElementById('playerEmail').value.trim();
 
             if (!playerName || !playerEmail) {
                 showFeedback(false, null, 0, "Please enter your name and email to start the game.");
                 return;
             }
 
-            // Reset game state for a new game
             score = 0;
             correctCount = 0;
             totalAttempts = 0;
             currentVideo = 1;
             document.getElementById('score').textContent = score;
             document.getElementById('accuracy').textContent = '100';
-
 
             document.getElementById('start-screen').style.display = 'none';
             document.getElementById('game-screen').style.display = 'flex';
@@ -629,42 +699,43 @@
             }
         }
 
-        
-
         function checkAnswer(decision, boxLabel = null) {
             clearInterval(timer);
             const correct = correctAnswers[currentVideo - 1];
             let isCorrect = false;
             let scoreChange = 0;
 
-            totalAttempts++; // Increment total attempts
+            totalAttempts++;
 
-            if (decision === correct.decision) {
-                if (decision === 'Stow') {
-                    if (correct.box === boxLabel) {
+            if (correct) {
+                if (decision === correct.decision) {
+                    if (decision === 'Stow') {
+                        if (correct.box === boxLabel) {
+                            isCorrect = true;
+                            scoreChange = 10;
+                        }
+                    } else {
                         isCorrect = true;
                         scoreChange = 10;
                     }
-                } else {
-                    isCorrect = true;
-                    scoreChange = 10;
                 }
+            } else {
+                isCorrect = false;
             }
 
             if (isCorrect) {
-                correctCount++; // Increment correct answers
+                correctCount++;
             }
 
             score += scoreChange;
             document.getElementById('score').textContent = score;
 
-            // Calculate and display accuracy
             const accuracy = totalAttempts > 0 ? Math.round((correctCount / totalAttempts) * 100) : 100;
             document.getElementById('accuracy').textContent = accuracy;
 
             showFeedback(isCorrect, correct, scoreChange);
 
-            if (currentVideo > videoSources.length) {
+            if (currentVideo >= videoSources.length) {
                 setTimeout(endGame, 1000);
             } else {
                 setTimeout(nextVideo, 1000);
@@ -683,7 +754,6 @@
                 'F1', 'F2', 'F3', 'F4',
                 'G1', 'G2', 'G3', 'G4',
                 'H1', 'H2', 'H3', 'H4'
-                
             ];
             labels.forEach(label => {
                 const box = document.createElement('div');
@@ -751,37 +821,38 @@
         }
 
         function endGame() {
+            saveScoreToFirebase();
             document.getElementById('game-screen').style.display = 'none';
-            document.getElementById('end-screen').style.display = 'flex';
-            document.getElementById('final-score').textContent = score;
-
-            // Calculate final accuracy
-            const finalAccuracy = totalAttempts > 0 ? Math.round((correctCount / totalAttempts) * 100) : 0;
-            document.getElementById('final-accuracy').textContent = finalAccuracy;
-
-            const players = JSON.parse(localStorage.getItem('stow_players') || '[]');
-            const currentPlayerEntry = {
-                name: playerName,
-                email: playerEmail,
-                score: score,
-                timestamp: new Date().toISOString()
-            };
-            players.push(currentPlayerEntry);
-            players.sort((a, b) => b.score - a.score);
-            localStorage.setItem('stow_players', JSON.stringify(players));
-
-            const leaderboardList = document.getElementById('leaderboard-list');
-            leaderboardList.innerHTML = '';
-            players.forEach((player, index) => {
-                const item = document.createElement('li');
-                item.className = 'leaderboard-item';
-                if (player === currentPlayerEntry) {
-                    item.classList.add('current-player');
-                }
-                item.innerHTML = `<span>${index + 1}. ${player.name} (${player.email})</span><span>${player.score}</span>`;
-                leaderboardList.appendChild(item);
-            });
+            document.getElementById('leaderboard-screen').style.display = 'flex';
         }
+
+        function showStartScreen() {
+            document.getElementById('leaderboard-screen').style.display = 'none';
+            document.getElementById('start-screen').style.display = 'flex';
+            currentVideo = 1;
+            score = 0;
+            correctCount = 0;
+            totalAttempts = 0;
+        }
+
+        document.getElementById('prev-page-btn').addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                updateLeaderboardTable();
+            }
+        });
+
+        document.getElementById('next-page-btn').addEventListener('click', () => {
+            const totalPages = Math.ceil(leaderboard.length / LEADERBOARD_PAGE_SIZE);
+            if (currentPage < totalPages) {
+                currentPage++;
+                updateLeaderboardTable();
+            }
+        });
+
+        window.onload = () => {
+            setupLeaderboardListener();
+        };
     </script>
 </body>
 
